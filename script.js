@@ -4,18 +4,16 @@ const inputBox = document.getElementById("input-box");
 const timeBox = document.getElementById("time-box");
 const listContainer = document.getElementById("list-container");
 const returningOverlay = document.getElementById("returning-overlay");
-let todoList = [];
 
+let todoList = [];
 let scene, camera, renderer, earthGroup, earthMesh, cloudsMesh;
 
 const TAIWAN_LONGITUDE = 121.5;
 const DEFAULT_ROTATION_Y = 4.712 - TAIWAN_LONGITUDE * (Math.PI / 180);
-
 const DEFAULT_ROTATION_X = 0.4;
 
 let targetRotationY = DEFAULT_ROTATION_Y;
 let targetRotationX = DEFAULT_ROTATION_X;
-
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 let isAutoRotating = true;
@@ -28,7 +26,6 @@ function init3DEarth() {
   const height = container.clientHeight;
 
   scene = new THREE.Scene();
-
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   camera.position.z = 2.6;
 
@@ -41,10 +38,8 @@ function init3DEarth() {
   container.appendChild(renderer.domElement);
 
   earthGroup = new THREE.Group();
-
   earthGroup.rotation.y = DEFAULT_ROTATION_Y;
   earthGroup.rotation.x = DEFAULT_ROTATION_X;
-
   scene.add(earthGroup);
 
   const textureLoader = new THREE.TextureLoader();
@@ -90,7 +85,6 @@ function init3DEarth() {
   container.addEventListener("mousedown", onMouseDown);
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup", onMouseUp);
-
   container.addEventListener("touchstart", onTouchStart, { passive: false });
   document.addEventListener("touchmove", onTouchMove, { passive: false });
   document.addEventListener("touchend", onMouseUp);
@@ -123,7 +117,6 @@ function animate() {
     if (!isDragging && isAutoRotating) {
       earthGroup.rotation.y +=
         (targetRotationY - earthGroup.rotation.y) * 0.05 + 0.0002;
-
       earthGroup.rotation.x += (targetRotationX - earthGroup.rotation.x) * 0.05;
     }
   }
@@ -179,18 +172,13 @@ function getUserLocation() {
     .then((response) => response.json())
     .then((data) => {
       if (data && data.longitude) {
-        console.log("定位成功:", data.city, data.country_name);
-
         targetRotationY = 4.712 - data.longitude * (Math.PI / 180);
-
         if (data.latitude && data.latitude > 20) {
           targetRotationX = 0.4;
         }
       }
     })
-    .catch((e) => {
-      console.log("定位失敗，維持在東亞預設視角");
-    });
+    .catch((e) => {});
 }
 
 function init() {
@@ -222,17 +210,13 @@ orbTrigger.addEventListener("click", () => {
 
 function closeApp() {
   appContainer.classList.add("hidden");
-
   if (returningOverlay) {
     returningOverlay.classList.remove("hidden");
-
     void returningOverlay.offsetWidth;
     returningOverlay.classList.add("show");
-
     setTimeout(() => {
       returningOverlay.classList.remove("show");
       returningOverlay.classList.add("hidden");
-
       orbTrigger.classList.remove("fade-out");
     }, 500);
   } else {
@@ -264,6 +248,7 @@ function deleteTask(id) {
   todoList = todoList.filter((t) => t.id !== id);
   saveAndRender();
 }
+
 function toggleTask(id) {
   const t = todoList.find((i) => i.id === id);
   if (t) {
@@ -279,28 +264,34 @@ function toggleTask(id) {
       }, 10);
   }
 }
+
 function saveAndRender() {
   localStorage.setItem("spaceTodosV3", JSON.stringify(todoList));
   render();
 }
+
 function render() {
   listContainer.innerHTML = "";
   todoList.forEach((t) => {
     const li = document.createElement("li");
-    const ft = t.time
-      ? new Date(t.time).toLocaleString("zh-TW", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-      : "";
+
+    let ft = "";
+    if (t.time) {
+      ft = new Date(t.time).toLocaleString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+    }
+
     li.innerHTML = `<label class="todo-item" id="item-${t.id}"><input type="checkbox" class="todo-checkbox" ${t.checked ? "checked" : ""} onchange="toggleTask(${t.id})"><svg class="svg-checkbox" viewBox="0 0 24 24"><circle class="circle-outline" cx="12" cy="12" r="10"></circle><path class="checkmark" d="M6 12 L10 16 L18 8"></path></svg><div class="text-wrap"><span class="todo-text">${t.text}</span>${ft ? `<div class="todo-time">🕒 ${ft}</div>` : ""}</div><span class="delete-btn" onclick="deleteTask(${t.id})">×</span></label>`;
     listContainer.appendChild(li);
   });
 }
+
 function checkNotifications() {
   if (Notification.permission !== "granted") return;
   const now = new Date();
@@ -315,4 +306,5 @@ function checkNotifications() {
     }
   });
 }
+
 init();
