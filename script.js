@@ -192,13 +192,13 @@ function init() {
 }
 
 function testNotification() {
-  if (!("Notification" in window)) return alert("瀏覽器不支援通知");
+  if (!("Notification" in window)) return alert("Browser does not support notifications.");
   if (Notification.permission === "granted")
-    new Notification("測試成功", { body: "通知功能運作正常！" });
+    new Notification("Test Successful", { body: "Notification system is functioning correctly!" });
   else
     Notification.requestPermission().then((p) => {
       if (p === "granted")
-        new Notification("授權成功", { body: "現在可以接收星際任務通知了" });
+        new Notification("Permission Granted", { body: "You can now receive mission notifications." });
     });
 }
 
@@ -227,9 +227,9 @@ function closeApp() {
 function addTask() {
   const text = inputBox.value.trim();
   const timeVal = timeBox.value;
-  if (!text) return alert("請輸入任務指令！");
+  if (!text) return alert("Please enter mission command!");
   if (!timeVal)
-    return alert("錯誤：未設定時間座標！\n\n請點擊右側日曆設定時間。");
+    return alert("Error: Time coordinate not set!\n\nPlease click the calendar on the right to set the time.");
   const newTask = {
     id: Date.now(),
     text: text,
@@ -277,13 +277,14 @@ function render() {
 
     let ft = "";
     if (t.time) {
-      ft = new Date(t.time).toLocaleString("zh-TW", {
+      // Changed to en-US for English date format
+      ft = new Date(t.time).toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-        hour12: false,
+        hour12: false, // Kept 24H format for Sci-Fi feel
       });
     }
 
@@ -297,8 +298,8 @@ function checkNotifications() {
   const now = new Date();
   todoList.forEach((t) => {
     if (t.time && !t.notified && !t.checked && now >= new Date(t.time)) {
-      new Notification("待辦事項提醒", {
-        body: `時間到了：${t.text}`,
+      new Notification("Mission Reminder", {
+        body: `Time's up: ${t.text}`,
         icon: "https://cdn-icons-png.flaticon.com/512/2592/2592953.png",
       });
       t.notified = true;
