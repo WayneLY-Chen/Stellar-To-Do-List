@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,15 +28,17 @@
 
       <div class="input-group">
         <input type="text" id="input-box" placeholder="Enter task details..." />
-        
+
         <input
           type="text"
           id="time-box"
           placeholder="Select Date & Time..."
-          onfocus="(this.type='datetime-local')"
-          onblur="(this.value ? this.type='datetime-local' : this.type='text')"
+          onfocus="this.type = 'datetime-local'"
+          onblur="
+            this.value ? (this.type = 'datetime-local') : (this.type = 'text')
+          "
         />
-        
+
         <button onclick="addTask()" class="add-btn">Submit</button>
       </div>
 
@@ -45,7 +48,12 @@
     </div>
 
     <div id="returning-overlay" class="hidden">
-      <div class="returning-earth"></div>
+      <div class="returning-content">
+        <div class="loading-text">Loading...</div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
     </div>
 
     <script src="script.js"></script>
