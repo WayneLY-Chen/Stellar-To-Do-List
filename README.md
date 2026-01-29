@@ -5,7 +5,7 @@ Introduction Stellar Tasks is a next-generation To-Do List application that tran
 
 The application is built with a focus on "Gamified Productivity." Completing a task triggers a satisfying particle explosion, while restoring a task initiates a unique "Time-Rewind" animation, visually reassembling the task item from stardust.
 
-<p>&emsp;&emsp;Core Features
+Core Features
 
 ✅ Smart Task Management:
 
