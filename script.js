@@ -18,6 +18,17 @@ let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 let isAutoRotating = true;
 
+let isReturningMode = false;
+let returningStartTime = 0;
+
+let startReturningRotationY = 0;
+let startReturningRotationX = 0;
+
+let finalReturningRotationY = 0;
+let finalReturningRotationX = 0;
+
+const RETURN_DURATION = 4000;
+
 function init3DEarth() {
   const container = document.getElementById("earth-container");
   if (!container) return;
@@ -114,7 +125,40 @@ function animate() {
   }
 
   if (earthGroup) {
-    if (!isDragging && isAutoRotating) {
+    if (isReturningMode) {
+      const now = performance.now();
+      const elapsed = now - returningStartTime;
+      let progress = elapsed / RETURN_DURATION;
+
+      if (progress >= 1) {
+        progress = 1;
+        isReturningMode = false;
+
+        targetRotationY = finalReturningRotationY;
+        targetRotationX = finalReturningRotationX;
+
+        earthGroup.rotation.y = finalReturningRotationY;
+        earthGroup.rotation.x = finalReturningRotationX;
+
+        orbTrigger.classList.remove("returning-mode");
+        isDragging = false;
+        isAutoRotating = true;
+
+        if (returningOverlay) {
+          returningOverlay.classList.remove("show");
+          returningOverlay.classList.add("hidden");
+        }
+      } else {
+        const ease = -(Math.cos(Math.PI * progress) - 1) / 2;
+
+        earthGroup.rotation.y =
+          startReturningRotationY +
+          (finalReturningRotationY - startReturningRotationY) * ease;
+        earthGroup.rotation.x =
+          startReturningRotationX +
+          (finalReturningRotationX - startReturningRotationX) * ease;
+      }
+    } else if (!isDragging && isAutoRotating) {
       earthGroup.rotation.y +=
         (targetRotationY - earthGroup.rotation.y) * 0.05 + 0.0002;
       earthGroup.rotation.x += (targetRotationX - earthGroup.rotation.x) * 0.05;
@@ -125,12 +169,14 @@ function animate() {
 }
 
 function onMouseDown(e) {
+  if (isReturningMode) return;
   isDragging = true;
   isAutoRotating = false;
   previousMousePosition = { x: e.clientX, y: e.clientY };
 }
 
 function onMouseMove(e) {
+  if (isReturningMode) return;
   if (!isDragging) return;
   const deltaMove = {
     x: e.clientX - previousMousePosition.x,
@@ -142,10 +188,12 @@ function onMouseMove(e) {
 }
 
 function onMouseUp(e) {
+  if (isReturningMode) return;
   isDragging = false;
 }
 
 function onTouchStart(e) {
+  if (isReturningMode) return;
   if (e.touches.length === 1) {
     isDragging = true;
     isAutoRotating = false;
@@ -157,6 +205,7 @@ function onTouchStart(e) {
 }
 
 function onTouchMove(e) {
+  if (isReturningMode) return;
   if (!isDragging) return;
   const deltaMove = {
     x: e.touches[0].clientX - previousMousePosition.x,
@@ -218,6 +267,7 @@ function testNotification() {
 }
 
 orbTrigger.addEventListener("click", () => {
+  if (isReturningMode) return;
   orbTrigger.classList.add("fade-out");
   appContainer.classList.remove("hidden");
   if (Notification.permission === "default") Notification.requestPermission();
@@ -225,15 +275,52 @@ orbTrigger.addEventListener("click", () => {
 
 function closeApp() {
   appContainer.classList.add("hidden");
+
   if (returningOverlay) {
+    orbTrigger.classList.remove("fade-out");
+    orbTrigger.classList.add("returning-mode");
+
     returningOverlay.classList.remove("hidden");
     void returningOverlay.offsetWidth;
     returningOverlay.classList.add("show");
+
+    startReturningRotationY = earthGroup.rotation.y;
+    startReturningRotationX = earthGroup.rotation.x;
+
+    returningStartTime = performance.now();
+    isReturningMode = true;
+
+    let currentY = startReturningRotationY;
+    let targetY = DEFAULT_ROTATION_Y;
+    let currentX = startReturningRotationX;
+    let targetX = DEFAULT_ROTATION_X;
+
+    const PI2 = Math.PI * 2;
+
+    let cycles = Math.round((currentY - targetY) / PI2);
+    let nearestTargetY = targetY + cycles * PI2;
+
+    let diffY = nearestTargetY - currentY;
+    let diffX = Math.abs(targetX - currentX);
+
+    if (Math.abs(diffY) < 0.1 && diffX < 0.1) {
+      finalReturningRotationY = nearestTargetY + PI2;
+    } else {
+      finalReturningRotationY = nearestTargetY;
+    }
+
+    finalReturningRotationX = targetX;
+
     setTimeout(() => {
       returningOverlay.classList.remove("show");
       returningOverlay.classList.add("hidden");
-      orbTrigger.classList.remove("fade-out");
-    }, 500);
+
+      isReturningMode = false;
+      orbTrigger.classList.remove("returning-mode");
+
+      isDragging = false;
+      isAutoRotating = true;
+    }, RETURN_DURATION);
   } else {
     orbTrigger.classList.remove("fade-out");
   }
