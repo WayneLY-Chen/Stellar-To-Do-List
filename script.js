@@ -192,14 +192,29 @@ function init() {
 }
 
 function testNotification() {
-  if (!("Notification" in window)) return alert("Browser does not support notifications.");
-  if (Notification.permission === "granted")
-    new Notification("Test Successful", { body: "Notification system is functioning correctly!" });
-  else
-    Notification.requestPermission().then((p) => {
-      if (p === "granted")
-        new Notification("Permission Granted", { body: "You can now receive mission notifications." });
+  if (!("Notification" in window)) {
+    return alert("This browser does not support notifications.");
+  }
+
+  if (Notification.permission === "granted") {
+    new Notification("Test Successful", {
+      body: "Notification system is functioning correctly!",
+      icon: "https://cdn-icons-png.flaticon.com/512/3212/3212580.png",
     });
+  } else if (Notification.permission === "denied") {
+    alert(
+      "Notifications are blocked. Please click the Lock icon next to the URL bar to enable them.",
+    );
+  } else {
+    Notification.requestPermission().then((p) => {
+      if (p === "granted") {
+        new Notification("Permission Granted", {
+          body: "You can now receive mission notifications.",
+          icon: "https://cdn-icons-png.flaticon.com/512/3212/3212580.png",
+        });
+      }
+    });
+  }
 }
 
 orbTrigger.addEventListener("click", () => {
@@ -229,7 +244,9 @@ function addTask() {
   const timeVal = timeBox.value;
   if (!text) return alert("Please enter mission command!");
   if (!timeVal)
-    return alert("Error: Time coordinate not set!\n\nPlease click the calendar on the right to set the time.");
+    return alert(
+      "Error: Time coordinate not set!\n\nPlease click the calendar on the right to set the time.",
+    );
   const newTask = {
     id: Date.now(),
     text: text,
@@ -277,14 +294,13 @@ function render() {
 
     let ft = "";
     if (t.time) {
-      // Changed to en-US for English date format
       ft = new Date(t.time).toLocaleString("en-US", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
-        hour12: false, // Kept 24H format for Sci-Fi feel
+        hour12: false,
       });
     }
 
