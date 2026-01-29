@@ -1,0 +1,531 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+}
+
+body {
+  background: url("https://images.unsplash.com/photo-1538370965046-79c0d6907d47?q=80&w=2000&auto=format&fit=crop")
+    no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+.orb-container {
+  text-align: center;
+  cursor: grab;
+  transition: all 0.6s ease;
+  z-index: 10;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.orb-container:active {
+  cursor: grabbing;
+}
+
+#earth-container {
+  width: 250px;
+  height: 250px;
+  margin-bottom: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: transparent !important;
+
+  filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.6));
+
+  transition: transform 0.3s ease;
+
+  animation: float 6s ease-in-out infinite;
+}
+
+#earth-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  outline: none;
+}
+
+.orb-container:hover #earth-container {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 30px rgba(74, 144, 226, 0.9));
+}
+
+.orb-text {
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.orb-container.fade-out {
+  opacity: 0;
+  transform: scale(0.5) translateY(-100px);
+  pointer-events: none;
+}
+
+.main-container {
+  position: absolute;
+  width: 95%;
+  max-width: 850px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.main-container.hidden {
+  opacity: 0;
+  transform: scale(0.8) translateY(50px);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.test-btn {
+  display: block;
+  margin: 0 auto 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #a29bfe;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.test-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: #fff;
+}
+
+.input-group {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+input[type="text"],
+input[type="datetime-local"] {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+  color: #fff;
+  transition: all 0.3s ease;
+  height: 55px;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+input:focus {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-color: #a29bfe;
+  box-shadow: 0 0 15px rgba(162, 155, 254, 0.4);
+}
+
+input[type="datetime-local"] {
+  font-family: "Consolas", monospace;
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+input[type="datetime-local"]:focus {
+  border-color: #fff;
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.5),
+    0 0 30px rgba(162, 155, 254, 0.6),
+    0 0 50px rgba(108, 92, 231, 0.4);
+  transform: scale(1.02);
+}
+
+#input-box {
+  flex-grow: 2;
+  min-width: 0;
+}
+#time-box {
+  flex-grow: 1;
+  min-width: 220px;
+}
+
+.add-btn {
+  height: 55px;
+  padding: 0 30px;
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 92, 231, 0.6);
+}
+
+@media (max-width: 768px) {
+  .input-group {
+    flex-wrap: wrap;
+  }
+  #input-box,
+  #time-box,
+  .add-btn {
+    width: 100%;
+    flex-grow: 1;
+  }
+}
+
+ul {
+  list-style: none;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+ul::-webkit-scrollbar {
+  width: 6px;
+}
+ul::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  overflow: hidden;
+}
+.todo-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.todo-checkbox {
+  display: none;
+}
+.svg-checkbox {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+  flex-shrink: 0;
+  transition: 0.3s;
+}
+.circle-outline {
+  stroke: rgba(255, 255, 255, 0.5);
+  fill: none;
+  stroke-width: 2;
+  transition: 0.3s;
+}
+.checkmark {
+  stroke: #a29bfe;
+  fill: none;
+  stroke-width: 3;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  transition: 0.4s;
+}
+
+.text-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  transition: 0.3s;
+}
+
+.todo-text {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 5px;
+  word-break: break-all;
+  transition: 0.3s;
+}
+
+.todo-time {
+  font-size: 13px;
+  color: #a29bfe;
+  font-family: "Consolas", monospace;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.3s;
+}
+
+.delete-btn {
+  margin-left: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 22px;
+  transition: 0.2s;
+  z-index: 5;
+}
+.delete-btn:hover {
+  color: #ff7675;
+  transform: scale(1.2);
+}
+
+.todo-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, #fff, #a29bfe, #6c5ce7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.todo-item::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    transparent 20%,
+    rgba(162, 155, 254, 0.8) 21%,
+    transparent 60%
+  );
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.todo-item:has(.todo-checkbox:checked) .svg-checkbox,
+.todo-item:has(.todo-checkbox:checked) .text-wrap {
+  opacity: 0.1;
+  filter: blur(2px);
+}
+
+.todo-item:has(.todo-checkbox:checked)::before {
+  animation: planet-implode 0.6s ease-out forwards;
+}
+
+.todo-item:has(.todo-checkbox:checked)::after {
+  animation: stardust-explode 0.6s ease-out 0.2s forwards;
+}
+
+.todo-item.restoring::before {
+  animation: planet-rewind 0.8s ease-in-out forwards;
+}
+
+.todo-item.restoring::after {
+  animation: stardust-rewind 0.6s ease-in-out forwards;
+}
+
+.todo-item.restoring .svg-checkbox,
+.todo-item.restoring .text-wrap {
+  animation: fade-in-slow 0.8s ease-in forwards;
+}
+
+@keyframes planet-implode {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+    box-shadow: 0 0 20px #fff;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes stardust-explode {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes stardust-rewind {
+  0% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes planet-rewind {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  40% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+    box-shadow: 0 0 30px #a29bfe;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-slow {
+  0% {
+    opacity: 0.1;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.close-btn {
+  width: 100%;
+  margin-top: 15px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+#returning-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#returning-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.returning-earth {
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: url("https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg")
+    repeat-x;
+  background-size: 210%;
+  background-position: center 20%;
+  box-shadow:
+    inset -50px -20px 100px rgba(0, 0, 0, 0.9),
+    inset 20px 20px 50px rgba(255, 255, 255, 0.15),
+    0 0 60px rgba(74, 144, 226, 0.6),
+    0 0 120px rgba(74, 144, 226, 0.3);
+  transform: scale(0);
+  opacity: 0;
+}
+
+#returning-overlay.show .returning-earth {
+  animation: earth-zoom-spin 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes earth-zoom-spin {
+  0% {
+    transform: scale(0.1) rotate(-10deg);
+    opacity: 0;
+    background-position: 0% 20%;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    background-position: 30% 20%;
+  }
+}
