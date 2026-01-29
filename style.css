@@ -27,11 +27,12 @@ body::before {
   background: rgba(0, 0, 0, 0.5);
   z-index: -1;
 }
+
 .orb-container {
   text-align: center;
   cursor: grab;
   transition: all 0.6s ease;
-  z-index: 10;
+  z-index: 9999;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -42,22 +43,34 @@ body::before {
   cursor: grabbing;
 }
 
+.orb-container.returning-mode {
+  cursor: default;
+  pointer-events: none;
+}
+
+.orb-container.returning-mode .orb-text {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
 #earth-container {
   width: 250px;
   height: 250px;
   margin-bottom: 10px;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: transparent !important;
-
   filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.6));
-
-  transition: transform 0.3s ease;
-
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
   animation: float 6s ease-in-out infinite;
+}
+
+.orb-container.returning-mode #earth-container {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 50px rgba(74, 144, 226, 0.8));
 }
 
 #earth-container canvas {
@@ -110,6 +123,7 @@ body::before {
   opacity: 1;
   transform: scale(1);
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 50;
 }
 
 .main-container.hidden {
@@ -481,11 +495,11 @@ ul::-webkit-scrollbar-thumb {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 9000;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -496,36 +510,71 @@ ul::-webkit-scrollbar-thumb {
   pointer-events: all;
 }
 
-.returning-earth {
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: url("https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg")
-    repeat-x;
-  background-size: 210%;
-  background-position: center 20%;
-  box-shadow:
-    inset -50px -20px 100px rgba(0, 0, 0, 0.9),
-    inset 20px 20px 50px rgba(255, 255, 255, 0.15),
-    0 0 60px rgba(74, 144, 226, 0.6),
-    0 0 120px rgba(74, 144, 226, 0.3);
-  transform: scale(0);
+.returning-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  margin-top: 350px;
+}
+
+.loading-text {
+  color: #a29bfe;
+  font-size: 16px;
+  letter-spacing: 4px;
+  font-family: "Consolas", monospace;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+#returning-overlay.show .loading-text {
+  animation: fade-up 0.5s ease 0.1s forwards;
+}
+
+.progress-track {
+  width: 180px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
   opacity: 0;
 }
 
-#returning-overlay.show .returning-earth {
-  animation: earth-zoom-spin 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+#returning-overlay.show .progress-track {
+  animation: fade-in 0.5s ease 0.2s forwards;
 }
 
-@keyframes earth-zoom-spin {
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #6c5ce7, #a29bfe);
+  box-shadow: 0 0 10px #a29bfe;
+  border-radius: 2px;
+}
+
+#returning-overlay.show .progress-fill {
+  animation: progress-loading 4s linear forwards;
+}
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progress-loading {
   0% {
-    transform: scale(0.1) rotate(-10deg);
-    opacity: 0;
-    background-position: 0% 20%;
+    width: 0%;
   }
   100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-    background-position: 30% 20%;
+    width: 100%;
   }
 }
