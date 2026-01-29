@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>待辦事項</title>
+    <title>Stellar-To-Do-List</title>
     <link
       rel="icon"
       type="image/png"
@@ -16,30 +16,30 @@
   <body>
     <div class="orb-container" id="orb-trigger">
       <div id="earth-container"></div>
-      <p class="orb-text">登記待辦事項</p>
+      <p class="orb-text">To Do List</p>
     </div>
 
     <div class="main-container hidden" id="app-container">
-      <h2>待辦事項</h2>
+      <h2>List</h2>
 
       <button onclick="testNotification()" class="test-btn">
-        測試/開啟通知
+        Send test notification
       </button>
 
       <div class="input-group">
-        <input type="text" id="input-box" placeholder="輸入任務內容..." />
+        <input type="text" id="input-box" placeholder="Enter task details..." />
         <input
           type="datetime-local"
           id="time-box"
           onclick="this.showPicker()"
           onkeydown="return false;"
         />
-        <button onclick="addTask()" class="add-btn">發送</button>
+        <button onclick="addTask()" class="add-btn">Submit</button>
       </div>
 
       <ul id="list-container"></ul>
 
-      <button class="close-btn" onclick="closeApp()">返回地球</button>
+      <button class="close-btn" onclick="closeApp()">Return to Earth</button>
     </div>
 
     <div id="returning-overlay" class="hidden">
