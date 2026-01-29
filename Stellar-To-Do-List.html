@@ -1,5 +1,4 @@
-<!doctype html>
-<html lang="zh-TW">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,12 +27,15 @@
 
       <div class="input-group">
         <input type="text" id="input-box" placeholder="Enter task details..." />
+        
         <input
-          type="datetime-local"
+          type="text"
           id="time-box"
-          onclick="this.showPicker()"
-          onkeydown="return false;"
+          placeholder="Select Date & Time..."
+          onfocus="(this.type='datetime-local')"
+          onblur="(this.value ? this.type='datetime-local' : this.type='text')"
         />
+        
         <button onclick="addTask()" class="add-btn">Submit</button>
       </div>
 
