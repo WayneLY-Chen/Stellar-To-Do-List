@@ -38,4 +38,7 @@ Core Features
 <p>&emsp;&emsp;API: IP Geolocation API
 
 <p>&emsp;&emsp;Storage: LocalStorage (Data persistence)
+<p >
+<img width="2227" height="772" alt="image" src="https://github.com/user-attachments/assets/d43cb122-4e4d-4a81-840d-b00a3692acf0" />
+</p>
 
