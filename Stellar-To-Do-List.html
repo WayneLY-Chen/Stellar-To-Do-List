@@ -11,7 +11,20 @@
     />
     <link rel="stylesheet" href="style.css" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!--
+      integrity 是「這個檔案必須是這份內容，否則不要執行」。
+      沒有它的話，這一行等於無條件信任 cdnjs 未來送過來的任何東西——CDN 被入侵、
+      或帳號被接管而換掉檔案時，瀏覽器會照樣把它當成本頁的程式碼跑，而那份程式碼
+      能碰到這一頁的所有東西（包含 localStorage 裡的待辦事項）。
+      雜湊值取自 cdnjs 官方 API 公布的 SRI，並自行下載檔案重算比對過。
+      crossorigin="anonymous" 是 SRI 在跨來源腳本上生效的必要條件，不能省。
+    -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"
+      integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
   <body>
     <div class="orb-container" id="orb-trigger">
